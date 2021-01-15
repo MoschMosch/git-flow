@@ -48,14 +48,17 @@ git commit -am "Incrementing Version to $newVersion"
  
 # merge release branch with the new version number into master
 git checkout $masterBranch
-git merge --no-ff $releaseBranch
+git merge --no-ff --no-edit $releaseBranch
  
 # create tag for new version from -master
 git tag $newVersion
  
 # merge release branch with the new version number back into develop
 git checkout $devBranch
-git merge --no-ff $releaseBranch
+git merge --no-ff --no-edit $releaseBranch
  
 # remove release branch
 git branch -d $releaseBranch
+
+git push origin master
+git push origin develop

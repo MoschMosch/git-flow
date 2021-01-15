@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+set -e
 
 #InternalScriptParameter
 devBranch=develop
@@ -25,15 +26,15 @@ echo "Going to increase ${versionLevel}Version!"
 git checkout -b $releaseBranch $devBranch
  
 newVersionMvnParameter=
-if [ $versionLevel == "patch" ] ; then
+if [ $versionLevel = "patch" ] ; then
     newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}"
 fi
 
-if [ $versionLevel == "minor" ] ; then
+if [ $versionLevel = "minor" ] ; then
     newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\${parsedVersion.incrementalVersion}"
 fi
 
-if [ $versionLevel == "major" ] ; then
+if [ $versionLevel = "major" ] ; then
     newVersionMvnParameter="\${parsedVersion.nextMajorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}"
 fi
 

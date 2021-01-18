@@ -1,17 +1,13 @@
 #!/bin/sh
 set -e
 
-#InternalScriptParameter
+# InternalScriptParameter
 devBranch=develop
 masterBranch=master
 releaseBranch="release-tmp"
-versionFile="pom.xml"
+pathToPom="pom.xml"
 
-#Validate maven installation
-
-
-
-#Read level from input
+# Read level from input
 versionLevel=$1
 
 # Validate input
@@ -24,11 +20,13 @@ else
         exit 1
     fi
 fi
-echo "Going to increase ${versionLevel}Version!"
+echo "######### Going to increase ${versionLevel}Version!"
 
-# create the release branch from the -develop branch
+# Create the release branch from the develop branch
 git checkout -b $releaseBranch $devBranch
- 
+echo "######### Created release branch $releaseBranch!"
+
+# Construct Maven Command parameter to increase version on correct level
 newVersionMvnParameter=
 if [ $versionLevel = "patch" ] ; then
     newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}"
@@ -42,27 +40,38 @@ if [ $versionLevel = "major" ] ; then
     newVersionMvnParameter="\${parsedVersion.nextMajorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}"
 fi
 
+# Increase Version in pom.xml
 mvn build-helper:parse-version versions:set -q -DnewVersion=$newVersionMvnParameter versions:commit
+echo "######### Updated pom.xml"
 
+# Read new Version for tag and commit message
 newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+echo "######### New version is $newVersion"
 
+# Commit
+git commit -o $pathToPom -m "Incrementing Version to $newVersion"
+echo "######### Commit changes to pom.xml on release branch"
 
-# commit version number increment
-git commit -am "Incrementing Version to $newVersion"
- 
-# merge release branch with the new version number into master
+# Merge release branch with the new version into master
 git checkout $masterBranch
 git merge --no-ff --no-edit $releaseBranch
- 
-# create tag for new version from -master
+echo "######### Merge to master"
+
+# Create tag from master
 git tag $newVersion
- 
-# merge release branch with the new version number back into develop
+echo "######### Created Release tag on Master"
+
+# Merge release branch with back into develop
 git checkout $devBranch
 git merge --no-ff --no-edit $releaseBranch
- 
-# remove release branch
-git branch -d $releaseBranch
+echo "######### Merged to develop"
 
+# Remove release branch
+git branch -d $releaseBranch
+echo "######### Deleted release branch"
+
+# Publish changes
 git push origin master
 git push origin develop
+echo "######### Published changes"
+echo "######### Finished successful"

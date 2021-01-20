@@ -6,8 +6,10 @@
 
     <groupId>mosch.testing</groupId>
     <artifactId>git-flow-test</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <name>git-flow-test</name>
+
+    
 
     <properties>
         <java.version>11</java.version>

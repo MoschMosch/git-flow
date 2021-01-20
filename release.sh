@@ -16,7 +16,7 @@ if [ -z $versionLevel ]; then
     versionLevel="patch"
 else
     if [ $versionLevel != "minor" ] && [ $versionLevel != "major" ] && [ $versionLevel != "patch" ]; then
-        echo "Invalid input"
+        echo "Invalid input: Please use 'patch' or 'minor' or 'major'!\nNo input defaults to 'patch'."
         exit 1
     fi
 fi

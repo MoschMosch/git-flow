@@ -9,8 +9,6 @@
     <version>1.1.7</version>
     <name>git-flow-test</name>
 
-    SNAPSHOT
-
     <properties>
         <java.version>11</java.version>
     </properties>

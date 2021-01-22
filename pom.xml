@@ -6,7 +6,7 @@
 
     <groupId>mosch.testing</groupId>
     <artifactId>git-flow-test</artifactId>
-    <version>1.2.7</version>
+    <version>2.0.0</version>
     <name>git-flow-test</name>
 
     <properties>

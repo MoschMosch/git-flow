@@ -56,46 +56,13 @@ else
     git merge --ff-only
 fi
 
-# Check for SNAPSHOT statements
-SnapshotDependency=$(cat $pathToPom | grep SNAPSHOT || echo 'NoSNAPSHOT')
-if [ "$SnapshotDependency" = "NoSNAPSHOT" ] ; then
-    echo "######### No SNAPSHOT referrences found! Proceeding.."
-else
-    echo "######### Your pom.xml does include the word SNAPSHOT. Please remove it."
-    exit 1
-fi
-
 echo "######### Going to increase ${versionLevel}Version!"
 
 # Create the release branch from the develop branch
 git checkout -b $releaseBranch $devBranch
 echo "######### Created release branch $releaseBranch!"
 
-# Construct Maven Command parameter to increase version on correct level
-newVersionMvnParameter=
-if [ $versionLevel = "patch" ] ; then
-    newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}"
-fi
-
-if [ $versionLevel = "minor" ] ; then
-    newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.0"
-fi
-
-if [ $versionLevel = "major" ] ; then
-    newVersionMvnParameter="\${parsedVersion.nextMajorVersion}.0.0"
-fi
-
-# Increase Version in pom.xml
-mvn build-helper:parse-version versions:set -q -DnewVersion=$newVersionMvnParameter versions:commit
-echo "######### Updated pom.xml"
-
-# Read new Version for tag and commit message
-newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-echo "######### New version is $newVersion"
-
-# Commit
-git commit -o $pathToPom -m "Incrementing Version to $newVersion"
-echo "######### Commit changes to pom.xml on release branch"
+npm version $versionLevel
 
 # Merge release branch with the new version into master
 git checkout $masterBranch

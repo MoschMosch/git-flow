@@ -24,14 +24,14 @@ else
 fi
 
 # # Check or local changes
-# LocalStatus=$(git status --short)
-# if [ -z "$LocalStatus" ] ; then
-#     echo "######### No local changes! Proceeding.."
-# else
-#     echo "######### You have local changes.\n######### Please commit or revert them before you do a release!"
-#     echo "######### Use 'git status' to see them."
-#     exit 1
-# fi
+LocalStatus=$(git status --short)
+if [ -z "$LocalStatus" ] ; then
+    echo "######### No local changes! Proceeding.."
+else
+    echo "######### You have local changes.\n######### Please commit or revert them before you do a release!"
+    echo "######### Use 'git status' to see them."
+    exit 1
+fi
 
 # Check or local commits
 git fetch

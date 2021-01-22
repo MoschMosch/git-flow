@@ -69,10 +69,6 @@ git checkout $masterBranch
 git merge --no-ff --no-edit $releaseBranch
 echo "######### Merge to master"
 
-# Create tag from master
-git tag $newVersion
-echo "######### Created Release tag on Master"
-
 # Merge release branch with back into develop
 git checkout $devBranch
 git merge --no-ff --no-edit $releaseBranch

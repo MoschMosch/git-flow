@@ -78,11 +78,11 @@ if [ $versionLevel = "patch" ] ; then
 fi
 
 if [ $versionLevel = "minor" ] ; then
-    newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\${parsedVersion.incrementalVersion}"
+    newVersionMvnParameter="\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.0"
 fi
 
 if [ $versionLevel = "major" ] ; then
-    newVersionMvnParameter="\${parsedVersion.nextMajorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}"
+    newVersionMvnParameter="\${parsedVersion.nextMajorVersion}.0.0"
 fi
 
 # Increase Version in pom.xml

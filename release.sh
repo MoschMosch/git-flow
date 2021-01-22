@@ -17,7 +17,8 @@ if [ -z $versionLevel ]; then
     versionLevel="patch"
 else
     if [ $versionLevel != "minor" ] && [ $versionLevel != "major" ] && [ $versionLevel != "patch" ]; then
-        echo "#########Invalid input: Please use 'patch' or 'minor' or 'major'!\n#########No input defaults to 'patch'."
+        echo "######### Invalid input: Please use 'patch' or 'minor' or 'major'!"
+        echo "######### No input defaults to 'patch'."
         exit 1
     fi
 fi
@@ -27,7 +28,9 @@ LocalStatus=$(git status --short)
 if [ -z "$LocalStatus" ] ; then
     echo "######### No local changes! Proceeding.."
 else
-    echo "#########You have local changes.\n#########Please commit or revert them before you do a release!\n#########Use 'git status' to see them."
+    echo "######### You have local changes.\n######### Please commit or revert them before you do a release!"
+    echo "######### Use 'git status' to see them."
+    exit 1
 fi
 
 # Check or local commits
@@ -37,8 +40,11 @@ LocalCommits=$(git cherry $remoteName/$devBranch $devBranch)
 if [ -z "$LocalCommits" ] ; then
     echo "######### No local commits! Proceeding.."
 else
-    echo "#########You have local commits which are not on the remote yet.\n#########Please push them or reset your branch back to the remote state!\n#########Use 'git cherry $remoteName/$devBranch $devBranch' to see the commits."
-    echo "#########Use 'git push' to push and 'git reset --hard $remoteName/$devBranch' to revert back to remote state."
+    echo "######### You have local commits which are not on the remote yet."
+    echo "######### Please push them or reset your branch back to the remote state!"
+    echo "######### Use 'git cherry $remoteName/$devBranch $devBranch' to see the commits."
+    echo "######### Use 'git push' to push and 'git reset --hard $remoteName/$devBranch' to revert back to remote state."
+    exit 1
 fi
 
 # Handle remote commits
@@ -46,7 +52,7 @@ RemoteCommits=$(git cherry $devBranch $remoteName/$devBranch)
 if [ -z "$RemoteCommits" ] ; then
     echo "######### No remote commits! Proceeding.."
 else
-    echo "#########There are new commits on the remote branch. Going fast-forward..."
+    echo "######### There are new commits on the remote branch. Going fast-forward..."
     git merge --ff-only
 fi
 
@@ -55,7 +61,8 @@ SnapshotDependency=$(cat pom.xml| grep SNAPSHOT)
 if [ -z "$SnapshotDependency" ] ; then
     echo "######### No SNAPSHOT referrences found! Proceeding.."
 else
-    echo "#########Your pom.xml does include the word SNAPSHOT. Please remove it."
+    echo "######### Your pom.xml does include the word SNAPSHOT. Please remove it."
+    exit 1
 fi
 
 echo "######### Going to increase ${versionLevel}Version!"

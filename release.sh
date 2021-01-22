@@ -23,15 +23,15 @@ else
     fi
 fi
 
-# Check or local changes
-LocalStatus=$(git status --short)
-if [ -z "$LocalStatus" ] ; then
-    echo "######### No local changes! Proceeding.."
-else
-    echo "######### You have local changes.\n######### Please commit or revert them before you do a release!"
-    echo "######### Use 'git status' to see them."
-    exit 1
-fi
+# # Check or local changes
+# LocalStatus=$(git status --short)
+# if [ -z "$LocalStatus" ] ; then
+#     echo "######### No local changes! Proceeding.."
+# else
+#     echo "######### You have local changes.\n######### Please commit or revert them before you do a release!"
+#     echo "######### Use 'git status' to see them."
+#     exit 1
+# fi
 
 # Check or local commits
 git fetch
@@ -57,8 +57,8 @@ else
 fi
 
 # Check for SNAPSHOT statements
-SnapshotDependency=$(cat pom.xml| grep SNAPSHOT)
-if [ -z "$SnapshotDependency" ] ; then
+SnapshotDependency=$(cat pom.xml | grep SNAPSHOT || echo 'NoSNAPSHOT')
+if [ "$SnapshotDependency" = "NoSNAPSHOT" ] ; then
     echo "######### No SNAPSHOT referrences found! Proceeding.."
 else
     echo "######### Your pom.xml does include the word SNAPSHOT. Please remove it."
